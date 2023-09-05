@@ -2,22 +2,27 @@ import kotlinx.coroutines.*
 
 @OptIn(DelicateCoroutinesApi::class)
 fun main() {
-    with(GlobalScope) {
-        val parentJob = launch {
-            delay(200)
-            println("I`m the parent")
-            delay(200)
-        }
-        launch(context = parentJob) {
-            delay(200)
-            println("I`m a child")
-            delay(200)
-        }
-        if (parentJob.children.iterator().hasNext()) {
-            println("The Job has children")
-        } else {
-            println("The job has NO children")
+    var isDoorOpen = false
+
+    println("Unlocking the door... please wait.\n")
+    GlobalScope.launch {
+        delay(3000)
+
+        isDoorOpen = true
+    }
+
+    GlobalScope.launch {
+        repeat(4) {
+            println("Trying to open the door...\n")
+            delay(800)
+
+            println(if (isDoorOpen) {
+                "Open the door!\n"
+            } else {
+                "The door is still locked\n"
+            })
         }
     }
-    Thread.sleep(1000)
+
+    Thread.sleep(5000)
 }
