@@ -11,8 +11,10 @@ repositories {
 }
 
 dependencies {
+    val coroutines_version = "1.7.3"
     testImplementation(kotlin("test"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:$coroutines_version")
 }
 
 tasks.test {
