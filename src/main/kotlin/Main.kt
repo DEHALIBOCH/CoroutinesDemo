@@ -2,18 +2,22 @@ import kotlinx.coroutines.*
 
 @OptIn(DelicateCoroutinesApi::class)
 fun main() {
-    val job1 = GlobalScope.launch(start = CoroutineStart.LAZY) {
-        delay(200)
-        println("Pong")
-        delay(200)
-    }
-
-    GlobalScope.launch {
-        delay(200)
-        println("Ping")
-        job1.join()
-        println("Ping")
-        delay(200)
+    with(GlobalScope) {
+        val parentJob = launch {
+            delay(200)
+            println("I`m the parent")
+            delay(200)
+        }
+        launch(context = parentJob) {
+            delay(200)
+            println("I`m a child")
+            delay(200)
+        }
+        if (parentJob.children.iterator().hasNext()) {
+            println("The Job has children")
+        } else {
+            println("The job has NO children")
+        }
     }
     Thread.sleep(1000)
 }
