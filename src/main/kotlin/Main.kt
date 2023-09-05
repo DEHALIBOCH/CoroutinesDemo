@@ -2,27 +2,14 @@ import kotlinx.coroutines.*
 
 @OptIn(DelicateCoroutinesApi::class)
 fun main() {
-    var isDoorOpen = false
-
-    println("Unlocking the door... please wait.\n")
     GlobalScope.launch {
-        delay(3000)
-
-        isDoorOpen = true
-    }
-
-    GlobalScope.launch {
-        repeat(4) {
-            println("Trying to open the door...\n")
-            delay(800)
-
-            println(if (isDoorOpen) {
-                "Open the door!\n"
-            } else {
-                "The door is still locked\n"
-            })
+        val bgTreadName = Thread.currentThread().name
+        println("I`m Job 1 in thread $$bgTreadName")
+        delay(200)
+        GlobalScope.launch(Dispatchers.Main) {
+            val uiThreadName = Thread.currentThread().name
+            println("I`m Job 2 in thread $uiThreadName")
         }
     }
-
-    Thread.sleep(5000)
+    Thread.sleep(1000)
 }
