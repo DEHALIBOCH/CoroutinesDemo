@@ -1,8 +1,6 @@
 package chapter_4
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -22,10 +20,10 @@ fun getUserStandard(
     }
 }
 
-suspend fun getUserSuspend(userId: String): User {
+suspend fun getUserSuspend(userId: String): User = withContext(Dispatchers.Default) {
     delay(1000)
 
-    return User(userId, "Filip")
+    User(userId, "Filip")
 }
 
 fun main() {
