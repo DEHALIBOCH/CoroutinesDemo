@@ -1,5 +1,8 @@
 package chapter_4
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
 fun getUserStandard(
@@ -17,10 +20,17 @@ fun getUserStandard(
     }
 }
 
-fun main() {
-    getUserStandard("101") { user, throwable ->
-        user?.run(::println)
+suspend fun getUserSuspend(userId: String) : User {
+    delay(1000)
 
-        throwable?.printStackTrace()
+    return User(userId, "Filip")
+}
+
+fun main() {
+    GlobalScope.launch {
+        val user = getUserSuspend("101")
+
+        println(user)
     }
+    Thread.sleep(1500)
 }
