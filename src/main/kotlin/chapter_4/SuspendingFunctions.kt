@@ -4,16 +4,23 @@ import kotlin.concurrent.thread
 
 fun getUserStandard(
     userId: String,
-    onUserReady: (User) -> Unit,
+    onUserResponse: (User?, Throwable?) -> Unit,
 ) {
     thread {
-        Thread.sleep(1000)
-
-        val user = User(userId, "Filip")
-        onUserReady(user)
+        try {
+            Thread.sleep(1000)
+            val user = User(userId, "Filip")
+            onUserResponse(user, null)
+        } catch (error: Throwable) {
+            onUserResponse(null, error)
+        }
     }
-    println("end")
 }
 
+fun main() {
+    getUserStandard("101") { user, throwable ->
+        user?.run(::println)
 
-data class User(val userId: String, val name: String)
+        throwable?.printStackTrace()
+    }
+}
