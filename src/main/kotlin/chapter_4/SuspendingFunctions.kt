@@ -5,7 +5,7 @@ import kotlin.concurrent.thread
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-fun getUserStandard(
+private fun getUserStandard(
     userId: String,
     onUserResponse: (User?, Throwable?) -> Unit,
 ) {
@@ -20,7 +20,7 @@ fun getUserStandard(
     }
 }
 
-suspend fun getUserSuspend(userId: String): User = withContext(Dispatchers.Default) {
+private suspend fun getUserSuspend(userId: String): User = withContext(Dispatchers.Default) {
     delay(1000)
 
     User(userId, "Filip")
@@ -37,7 +37,7 @@ fun main() {
 
 
 // Some function from other library, that we can't change
-fun readFile(path: String, onReady: (File) -> Unit) {
+private fun readFile(path: String, onReady: (File) -> Unit) {
     // Some Heavy operation
     Thread.sleep(1000)
     // Callback
@@ -45,7 +45,7 @@ fun readFile(path: String, onReady: (File) -> Unit) {
 }
 
 // We can easily convert this fun to suspend fun
-suspend fun readFileSuspend(path: String): File = suspendCoroutine {
+private suspend fun readFileSuspend(path: String): File = suspendCoroutine {
     readFile(path) { file ->
         it.resume(file)
     }
