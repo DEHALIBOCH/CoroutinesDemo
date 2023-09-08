@@ -11,7 +11,7 @@ fun main() {
 
     scope.launch {
         println("Finding user")
-        val userDeferred = getUserByIdFromNetwork(1312, scope)
+        val userDeferred = getUserByIdFromNetwork(userId, scope)
         val usersFromFileDeferred = readUsersFromFile("users.txt", scope)
 
         val userStoredInFile = checkUserExists(
@@ -24,7 +24,6 @@ fun main() {
     }
 
     scope.onStop()
-    // страница 107
 }
 
 private fun getUserByIdFromNetwork(userId: Int, parentScope: CoroutineScope) = parentScope.async {
@@ -43,6 +42,23 @@ data class User(
     val name: String,
     val lastName: String,
 )
+
+private fun <T> produceValue(scope: CoroutineScope): Deferred<T> = scope.async {
+    var data: T? = null
+
+    requestData<T> { value ->
+        data = value
+    }
+
+    while (data == null) {
+
+    }
+
+    data!!
+}
+
+private fun <T> requestData(onDataReady: (T?) -> Unit) = onDataReady.invoke(null)
+
 
 private fun readUsersFromFile(filePath: String, scope: CoroutineScope) = scope.async {
     println("Reading the file of users")
